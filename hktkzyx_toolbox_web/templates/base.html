@@ -1,0 +1,72 @@
+{% from 'bootstrap/nav.html' import render_nav_item %}
+{% from 'bootstrap/utils.html' import render_messages %}
+<!doctype html>
+<html lang="en">
+
+<head>
+    {% block head %}
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <script src={{"FLASK_FONTAWOSOME"|getenv}} crossorigin="anonymous"></script>
+
+    {% block styles %}
+    <link href="../static/css/bootstrap.css" rel="stylesheet">
+    <style>
+        a.fab,
+        a.fas {
+            color: black;
+        }
+    </style>
+    {% endblock %}
+
+    <title>
+        {% block title %}{% endblock %} - hktkzyx Toolbox
+    </title>
+
+    {% endblock %}
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="{{url_for('index')}}">Toolbox</a>
+            <button class="navbar-toggler collapsed" type="button" data-bs-toggle="collapse"
+                data-bs-target="#navbarColor03" aria-controls="navbarColor03" aria-expanded="false"
+                aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="navbar-collapse collapse" id="navbarColor03">
+                <ul class="navbar-nav me-auto">
+                    {{ render_nav_item('index', 'Home',use_li=True) }}
+                    {{ render_nav_item('electronics.index', 'Electronics',use_li=True) }}
+                </ul>
+                <form class="d-flex">
+                    <input class="form-control me-sm-2" type="text" placeholder="Search">
+                    <button class="btn btn-secondary my-2 my-sm-0" type="submit">Search</button>
+                </form>
+            </div>
+        </div>
+    </nav>
+
+    <main class="container">
+        {{ render_messages(container=False, dismissible=True) }}
+        <!-- Your page content -->
+        {% block content %}{% endblock %}
+    </main>
+
+    <footer class="text-center">
+        {% block footer %}
+        &copy; 2021 –
+        <script>document.write(new Date().getFullYear())</script>
+        Written by hktkzyx
+        <a class="fab fa-github" href="https://github.com/hktkzyx"></a>
+        {% endblock %}
+    </footer>
+
+    {% block scripts %}
+    <script src="../static/js/bootstrap.bundle.js"></script>
+    {% endblock %}
+</body>
+
+</html>

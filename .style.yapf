@@ -1,0 +1,6 @@
+[style]
+based_on_style=pep8
+split_before_arithmetic_operator=True
+split_before_named_assigns=False
+indent_dictionary_value=True
+split_all_top_level_comma_separated_values=True

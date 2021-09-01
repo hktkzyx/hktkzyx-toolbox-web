@@ -1,0 +1,34 @@
+[tool.poetry]
+name = "hktkzyx-toolbox-web"
+version = "0.1.0"
+description = ""
+authors = ["hktkzyx <hktkzyx@yeah.net>"]
+license = "MIT"
+
+[tool.poetry.dependencies]
+python = ">=3.8,<3.10"
+Flask = "^2.0.1"
+Bootstrap-Flask = "^1.7.0"
+waitress = "^2.0.0"
+WTForms = "^2.3.3"
+hktkzyx-toolbox = { path = "../hktkzyx-toolbox", develop = true }
+Flask-WTF = "^0.15.1"
+
+[tool.poetry.dev-dependencies]
+yapf = "^0.31.0"
+flake8 = "^3.9.2"
+pytest = "^6.2.4"
+pytest-cov = "^2.12.1"
+
+[tool.pytest.ini_options]
+testpaths = "tests"
+
+[tool.coverage.run]
+source = ["hktkzyx_toolbox_web/*"]
+
+[tool.coverage.report]
+include = ["hktkzyx_toolbox_web/*"]
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"

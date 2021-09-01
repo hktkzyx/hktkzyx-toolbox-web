@@ -1,0 +1,12 @@
+{%extends 'base.html' %}
+{% block title %}Index{% endblock %}
+
+{% block content %}
+<h1>Welcome to hktkzyx's toolbox!</h1>
+<h2>Table of contents</h2>
+<ol>
+    <li>
+        <a href="{{url_for('electronics.index')}}">Electronics</a>
+    </li>
+</ol>
+{% endblock %}
