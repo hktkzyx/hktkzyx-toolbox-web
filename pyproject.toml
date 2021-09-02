@@ -4,6 +4,13 @@ version = "0.1.0"
 description = ""
 authors = ["hktkzyx <hktkzyx@yeah.net>"]
 license = "MIT"
+classifiers = [
+    "License :: OSI Approved :: MIT License",
+    "Natural Language :: Chinese (Simplified)",
+    "Natural Language :: English",
+    "Programming Language :: Python",
+    "Topic :: Scientific/Engineering"
+]
 
 [tool.poetry.dependencies]
 python = ">=3.8,<3.10"

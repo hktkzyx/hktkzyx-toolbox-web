@@ -4,10 +4,10 @@
 
 {% block content %}
 
-<h1>典型LED电流与配套电阻</h1>
+<h1>典型LED分压电阻</h1>
 <div class="row">
     <div class="col-sm-6">
-        {{render_form(form)}}
+        {{render_form(get_divider_resistance_form,action='/electronics/divider_resistance',method='post')}}
     </div>
     <div class="col-sm-6">
         <table class="table table-hover caption-top">
@@ -21,15 +21,47 @@
             <tbody>
                 <tr>
                     <th scope="row"> Voltage (V)</th>
-                    <td>{{ form.voltage|get_field_value|default('', True) }}</td>
+                    <td>{{ voltage_divider_resistance|default('', True) }}</td>
                 </tr>
                 <tr>
                     <th scope="row"> Current (mA)</th>
-                    <td>{{ current|default('', True) }}</td>
+                    <td>{{ real_current|default('', True) }}</td>
                 </tr>
                 <tr>
                     <th scope="row"> Resistance (Ω)</th>
-                    <td>{{ resistance|default('', True) }}</td>
+                    <td>{{ divider_resistance|default('', True) }}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<h1>典型LED工作电流</h1>
+<div class="row">
+    <div class="col-sm-6">
+        {{render_form(get_work_current_form,action='/electronics/work_current',method='post')}}
+    </div>
+    <div class="col-sm-6">
+        <table class="table table-hover caption-top">
+            <caption>Result</caption>
+            <thead>
+                <tr>
+                    <th scope="col">Item</th>
+                    <th scope="col">Value</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <th scope="row"> Voltage (V)</th>
+                    <td>{{ voltage_work_current|default('', True) }}</td>
+                </tr>
+                <tr>
+                    <th scope="row"> Current (mA)</th>
+                    <td>{{ work_current|default('', True) }}</td>
+                </tr>
+                <tr>
+                    <th scope="row"> Resistance (Ω)</th>
+                    <td>{{ real_resistance|default('', True) }}</td>
                 </tr>
             </tbody>
         </table>
