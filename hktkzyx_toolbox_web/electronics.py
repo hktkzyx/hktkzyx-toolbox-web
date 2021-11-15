@@ -3,7 +3,7 @@ from __future__ import annotations
 from flask import Blueprint, flash, render_template
 from flask_wtf import FlaskForm
 from hktkzyx_toolbox import electronics
-from hktkzyx_toolbox.electronics import typical_led
+from hktkzyx_toolbox.electronics import typical_led, LED, typical_led_red
 from wtforms import DecimalField, SubmitField
 from wtforms.fields.core import SelectField
 from wtforms.validators import DataRequired, NumberRange, Optional
@@ -19,6 +19,10 @@ class LEDGetDividerResistanceForm(FlaskForm):
         validators=[DataRequired()],
         choices=[('raw', '无'), ('nearest', '电流优先'), ('upper_limit', '电流上限'),
                  ('lower_limit', '电流下限')])
+    led = SelectField(
+        'LED 种类',
+        validators=[DataRequired()],
+        choices=[('typical led', '典型LED'), ('typical led red', '典型红光LED')])
     submit = SubmitField('提交')
 
 
@@ -30,29 +34,35 @@ class LEDGetWorkCurrentForm(FlaskForm):
         validators=[DataRequired()],
         choices=[('raw', '无'), ('nearest', '最接近'), ('up', '向上舍入'),
                  ('down', '向下舍入')])
+    led = SelectField(
+        'LED 种类',
+        validators=[DataRequired()],
+        choices=[('typical LED', '典型LED'), ('typical LED red', '典型红光LED')])
     submit = SubmitField('提交')
 
 
-def _get_real_current(voltage: float, resistance: Optional[float] = None):
+def _get_real_current(led: LED,
+                      voltage: float,
+                      resistance: Optional[float] = None):
     if resistance:
         try:
-            current = typical_led.get_work_current(voltage, resistance)
+            current = led.get_work_current(voltage, resistance)
         except ValueError:
             current = None
         return current
 
 
-def _get_real_current_resistance_group(voltage, current):
+def _get_real_current_resistance_group(led: LED, voltage, current):
     flash_msg = ('检查电流值大小,不可超过上限.')
     try:
-        resistance = typical_led.get_divider_resistance(voltage, current)
+        resistance = led.get_divider_resistance(voltage, current)
     except ValueError:
         flash(flash_msg, category='error')
         return (None, None), (current, None), (None, None)
     small_resistance = electronics.get_standard_resistance(resistance, 'down')
-    large_current = _get_real_current(voltage, small_resistance)
+    large_current = _get_real_current(led, voltage, small_resistance)
     large_resistance = electronics.get_standard_resistance(resistance, 'up')
-    small_current = _get_real_current(voltage, large_resistance)
+    small_current = _get_real_current(led, voltage, large_resistance)
     return (large_current, small_resistance), (current,
                                                resistance), (small_current,
                                                              large_resistance)
@@ -63,9 +73,15 @@ def _get_divider_resistance(
     voltage = float(form.voltage.data)
     current = float(form.current.data) * 1e-3
     kind = form.kind.data
+    led_type = form.led.data
+    print(led_type)
+    if str.lower(led_type) == 'typical led red':
+        led = typical_led_red
+    else:
+        led = typical_led
     ((large_current, small_resistance), (current, resistance),
      (small_current, large_resistance)) = _get_real_current_resistance_group(
-         voltage, current)
+         led, voltage, current)
     if kind == 'raw':
         real_current = current
         divider_resistance = resistance
@@ -108,6 +124,11 @@ def _get_work_current(
     voltage = float(form.voltage.data)
     resistance = float(form.resistance.data)
     kind = form.kind.data
+    led_type = form.led.data
+    if str.lower(led_type) == 'typical led red':
+        led = typical_led_red
+    else:
+        led = typical_led
     small_resistance = electronics.get_standard_resistance(resistance, 'down')
     large_resistance = electronics.get_standard_resistance(resistance, 'up')
     nearest_resistance = electronics.get_standard_resistance(resistance)
@@ -122,8 +143,7 @@ def _get_work_current(
 
     if real_resistance:
         try:
-            work_current = typical_led.get_work_current(
-                voltage, real_resistance)
+            work_current = led.get_work_current(voltage, real_resistance)
         except ValueError:
             flash('检查电阻阻值,不可过小.', 'error')
             work_current = None

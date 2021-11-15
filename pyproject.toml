@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "hktkzyx-toolbox-web"
-version = "0.1.0"
+version = "0.2.0"
 description = ""
 authors = ["hktkzyx <hktkzyx@yeah.net>"]
 license = "MIT"
@@ -18,8 +18,8 @@ Flask = "^2.0.1"
 Bootstrap-Flask = "^1.7.0"
 waitress = "^2.0.0"
 WTForms = "^2.3.3"
-hktkzyx-toolbox = { path = "../hktkzyx-toolbox", develop = true }
 Flask-WTF = "^0.15.1"
+hktkzyx-toolbox = {path = "../hktkzyx-toolbox"}
 
 [tool.poetry.dev-dependencies]
 yapf = "^0.31.0"
